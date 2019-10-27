@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Card from "../../components/Card";
+import { randomizeArray, showMessage } from "../../utils/utils";
 
 class Game extends Component {
   cards = [
@@ -67,18 +68,35 @@ class Game extends Component {
     super(props);
     this.state = {
       cards: this.cards,
-      clickedCards: []
+      clickedCards: [],
+      score: 0,
+      highestScore: 0
     };
   }
 
   cardClicked = card => {
     if (this.state.clickedCards.includes(card.id)) {
-      alert("You got Goosed");
+      showMessage("You got Goosed");
       this.setState({
-        clickedCards: []
+        clickedCards: [],
+        score: 0,
+        cards: randomizeArray(this.state.cards)
+      });
+    } else if (this.state.clickedCards.length === this.state.cards.length+1) {
+      showMessage("honk--You Win!--honk");
+      this.setState({
+        clickedCards: [],
+        score: 0,
+        highestScore:this.state.cards.length,
+        cards: randomizeArray(this.state.cards)
       });
     } else {
-      this.setState({ clickedCards:[...this.state.clickedCards, card.id]});
+      this.setState({
+        cards: randomizeArray(this.state.cards),
+        clickedCards: [...this.state.clickedCards, card.id],
+        score: this.state.score + 1,
+        highestScore: Math.max(this.state.score + 1, this.state.highestScore)
+      });
     }
   };
 
@@ -87,6 +105,16 @@ class Game extends Component {
     return (
       <div>
         <h1>Clicky Game</h1>
+        <div className="row">
+          <div className="col-5"></div>
+          <div className="col-4">
+            <h2>Your Score: {this.state.score}</h2>
+          </div>
+          <div className="col-3">
+            <h2>Your Highest Score: {this.state.highestScore}</h2>
+          </div>
+        </div>
+
         <div className="row">
           {this.state.cards.map((card, index) => (
             <Card
