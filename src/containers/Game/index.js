@@ -83,7 +83,7 @@ class Game extends Component {
         cards: randomizeArray(this.state.cards)
       });
     } else if (this.state.clickedCards.length === this.state.cards.length+1) {
-      showMessage("honk--You Win!--honk");
+      showMessage("honk--You Win!!!--honk");
       this.setState({
         clickedCards: [],
         score: 0,
